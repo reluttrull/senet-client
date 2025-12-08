@@ -1,16 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as signalR from '@microsoft/signalr';
+import { GameInfoBlock } from './components/game-info-block/game-info-block';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, GameInfoBlock],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly serverUrl = 'https://localhost:7019';
   protected readonly title = signal('Senet Client');
+  public canJoin = signal(true);
   public userid = signal('');
   public username = signal('');
   public opponentUsername = signal('');
@@ -42,6 +44,7 @@ export class App {
       console.log("Message from SignalR hub: matched with opponent", message);
       if (message.playerWhite?.userId == id) this.opponentUsername.set(message.playerBlack?.userName);
       else this.opponentUsername.set(message.playerWhite?.userName);
+      this.canJoin.set(false);
     });
     // receive board state updates from server
     connection.on("BoardUpdated", (message) => {

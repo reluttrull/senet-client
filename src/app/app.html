@@ -39,9 +39,10 @@
 <main class="main">
   <div>
     <h1>{{ title() }}</h1>
-    <button (click)="requestJoinGame()">Join Game</button>
-    <div>You: {{ username() }}</div>
-    <div>Opponent: {{ opponentUsername() }}</div>
+    @if (canJoin()) {
+      <button (click)="requestJoinGame()">Join Game</button>
+    }
+    <app-game-info-block [username]="username()" [opponentUsername]="opponentUsername()" />
   </div>
 </main>
 
