@@ -1,0 +1,47 @@
+<div id="game-board">
+    <div id="row-1" class="game-row">
+        @for (square of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; track square)
+        {
+            <div class="square">
+                @if (whitePawns() && whitePawns().includes(square))
+                {
+                    W
+                }
+                @if (blackPawns() && blackPawns().includes(square))
+                {
+                    B
+                }
+            </div>
+        }
+    </div>
+    <div id="row-2" class="game-row">
+        @for (square of [19, 18, 17, 16, 15, 14, 13, 12, 11, 10]; track square)
+        {
+            <div class="square">
+                @if (whitePawns() && whitePawns().includes(square))
+                {
+                    W
+                }
+                @if (blackPawns() && blackPawns().includes(square))
+                {
+                    B
+                }
+            </div>
+        }
+    </div>
+    <div id="row-3" class="game-row">
+        @for (square of [20, 21, 22, 23, 24, 25, 26, 27, 28, 29]; track square)
+        {
+            <div class="square">
+                @if (whitePawns() && whitePawns().includes(square))
+                {
+                    W
+                }
+                @if (blackPawns() && blackPawns().includes(square))
+                {
+                    B
+                }
+            </div>
+        }
+    </div>
+</div>

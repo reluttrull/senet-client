@@ -2,20 +2,24 @@ import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as signalR from '@microsoft/signalr';
 import { GameInfoBlock } from './components/game-info-block/game-info-block';
+import { Board } from './components/board/board';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, GameInfoBlock],
+  imports: [RouterOutlet, GameInfoBlock, Board],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly serverUrl = 'https://localhost:7019';
   protected readonly title = signal('Senet Client');
-  public canJoin = signal(true);
+  public gameStarted = signal(false);
   public userid = signal('');
   public username = signal('');
   public opponentUsername = signal('');
+  public sticksValue = signal(0);
+  public whitePawns = signal([]);
+  public blackPawns = signal([]);
 
   requestJoinGame() {
     fetch(`${this.serverUrl}/game/requestjoingame`, { credentials: 'include' })
@@ -44,12 +48,14 @@ export class App {
       console.log("Message from SignalR hub: matched with opponent", message);
       if (message.playerWhite?.userId == id) this.opponentUsername.set(message.playerBlack?.userName);
       else this.opponentUsername.set(message.playerWhite?.userName);
-      this.canJoin.set(false);
+      this.gameStarted.set(true);
     });
     // receive board state updates from server
     connection.on("BoardUpdated", (message) => {
       console.log("Message from SignalR hub: game board updated", message);
-      //setSticksValue(message.sticksValue);
+      this.sticksValue.set(message.sticksValue);
+      this.whitePawns.set(message.whitePositions);
+      this.blackPawns.set(message.blackPositions);
     });
 
     try {

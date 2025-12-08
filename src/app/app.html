@@ -39,10 +39,13 @@
 <main class="main">
   <div>
     <h1>{{ title() }}</h1>
-    @if (canJoin()) {
+    @if (!gameStarted()) {
       <button (click)="requestJoinGame()">Join Game</button>
     }
     <app-game-info-block [username]="username()" [opponentUsername]="opponentUsername()" />
+    @if (gameStarted()) {
+      <app-board [sticksValue]="sticksValue()" [whitePawns]="whitePawns()" [blackPawns]="blackPawns()" />
+    }
   </div>
 </main>
 
