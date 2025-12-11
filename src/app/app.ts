@@ -16,6 +16,7 @@ export class App {
   protected readonly serverUrl = 'https://localhost:7019';
   protected readonly title = signal('Senet Client');
   public gameStarted = signal(false);
+  public gameOver = signal(false);
   public userid = signal('');
   public username = signal('');
   public isPlayerWhite = signal(false);
@@ -25,15 +26,18 @@ export class App {
   public whitePawns = signal([]);
   public blackPawns = signal([]);
   public movablePawns = signal([]);
+  public winner = signal('');
 
   apiService = inject(ApiService);
 
   requestJoinGame() {
+    this.gameOver.set(false);
     this.apiService.apiRequestJoinGame()
       .subscribe((startUserInfo) => {
         console.log('initial server response (generated user info)', startUserInfo);
         this.username.set(startUserInfo.userName);
         this.userid.set(startUserInfo.userId);
+        this.opponentUsername.set('');
         this.connectSignalR(startUserInfo.userId);
       })
   }
@@ -85,6 +89,15 @@ export class App {
       this.blackPawns.set(message.blackPositions);
       this.movablePawns.set(message.movablePositions);
       this.isWhiteTurn.set(message.isWhiteTurn);
+    });
+    connection.on("GameOver", (message) => {
+      console.log("Message from SignalR hub: game over", message);
+      this.gameOver.set(true);
+      this.winner.set(message.userId);
+      this.whitePawns.set([]);
+      this.blackPawns.set([]);
+      this.movablePawns.set([]);
+      this.sticksValue.set(0);
     });
 
     try {
