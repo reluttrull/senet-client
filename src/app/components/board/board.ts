@@ -10,6 +10,7 @@ import { ApiService } from '../../services/api-service';
   styleUrls: ['./board.css']
 })
 export class Board {
+  userid = input.required<string>();
   isPlayerTurn = input();
   sticksValue = input();
   whitePawns = input.required<number[]>();
@@ -24,7 +25,7 @@ export class Board {
       return;
     }
     console.log(`ready to move pawn at index ${indexToMove} by ${this.sticksValue()} spaces.`);
-    this.apiService.apiMovePawn(indexToMove)
+    this.apiService.apiMovePawn(this.userid(), indexToMove)
       .subscribe((result) => {
         
       })

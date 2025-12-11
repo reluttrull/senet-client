@@ -10,27 +10,27 @@ export class ApiService {
   http = inject(HttpClient);
   
   apiRequestJoinGame() {
-    return this.http.get<UserInfo>(`${this.serverUrl}/game/requestjoingame`, {
+    return this.http.get<UserInfo>(`${this.serverUrl}/game/games`, {
       withCredentials: true
     })
   }
 
-  apiRollSticks() {
-    return this.http.get(`${this.serverUrl}/game/rollsticks`, {
+  apiRollSticks(userid:string) {
+    return this.http.put(`${this.serverUrl}/game/sticks/${userid}`, {
       withCredentials: true
     })
   }
 
-  apiSkipTurn() {
-    return this.http.get(`${this.serverUrl}/game/skipturn`, {
+  apiChangeTurn(userid:string, nextIsWhiteTurn:boolean) {
+    return this.http.put(`${this.serverUrl}/game/turns/${userid}/${nextIsWhiteTurn}`, {
       withCredentials: true
     })
   }
 
-  apiMovePawn(startPosition: number) {
+  apiMovePawn(userid:string, startPosition: number) {
     let params = new HttpParams();
     params = params.set('startPosition', startPosition);
-    return this.http.get(`${this.serverUrl}/game/movepawn`, {
+    return this.http.put(`${this.serverUrl}/game/pawns/${userid}/${startPosition}`, {
       params: params,
       withCredentials: true
     })

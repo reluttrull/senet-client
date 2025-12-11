@@ -39,14 +39,14 @@ export class App {
   }
 
   rollSticks() {
-    this.apiService.apiRollSticks()
+    this.apiService.apiRollSticks(this.userid())
       .subscribe((result) => {
         
       })
   }
 
   skipTurn() {
-    this.apiService.apiSkipTurn()
+    this.apiService.apiChangeTurn(this.userid(), !this.isWhiteTurn())
       .subscribe((result) => {
         
       })
