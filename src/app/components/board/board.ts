@@ -26,7 +26,7 @@ export class Board {
       console.log(`can't move pawn at index ${indexToMove}.`);
       return;
     }
-    console.log(`ready to move pawn at index ${indexToMove} by ${this.sticksValue()} spaces.`);
+    console.log(`ready to move pawn at index ${indexToMove} by ${this.sticksValue()} spaces.`, this.isMultiplayer() ? 'is multiplayer' : 'is singleplayer');
     this.apiService.apiMovePawn(this.userid(), indexToMove, utilities.getPath(this.isMultiplayer()))
       .subscribe((result) => {
         
