@@ -5,6 +5,7 @@ import { GameInfoBlock } from './components/game-info-block/game-info-block';
 import { Board } from './components/board/board';
 import { Score } from './components/score/score';
 import { ApiService } from './services/api-service';
+import { utilities } from './shared/utilities';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,6 @@ import { ApiService } from './services/api-service';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly serverUrl = 'https://localhost:7019';
   protected readonly title = signal('Senet Client');
   public gameStarted = signal(false);
   public gameOver = signal(false);
@@ -27,12 +27,13 @@ export class App {
   public blackPawns = signal([]);
   public movablePawns = signal([]);
   public winner = signal('');
+  public isMultiplayer = signal(true);
 
   apiService = inject(ApiService);
 
   requestJoinGame() {
     this.gameOver.set(false);
-    this.apiService.apiRequestJoinGame()
+    this.apiService.apiRequestJoinGame(utilities.getPath(this.isMultiplayer()))
       .subscribe((startUserInfo) => {
         console.log('initial server response (generated user info)', startUserInfo);
         this.username.set(startUserInfo.userName);
@@ -43,14 +44,14 @@ export class App {
   }
 
   rollSticks() {
-    this.apiService.apiRollSticks(this.userid())
+    this.apiService.apiRollSticks(this.userid(), utilities.getPath(this.isMultiplayer()))
       .subscribe((result) => {
         
       })
   }
 
   skipTurn() {
-    this.apiService.apiChangeTurn(this.userid(), !this.isWhiteTurn())
+    this.apiService.apiChangeTurn(this.userid(), !this.isWhiteTurn(), utilities.getPath(this.isMultiplayer()))
       .subscribe((result) => {
         
       })
@@ -63,7 +64,7 @@ export class App {
     }
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.serverUrl}/notifications`, { withCredentials: true })
+      .withUrl(`${utilities.serverUrl}/notifications`, { withCredentials: true })
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build();

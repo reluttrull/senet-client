@@ -1,5 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { ApiService } from '../../services/api-service';
+import { utilities } from '../../shared/utilities';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class Board {
   whitePawns = input.required<number[]>();
   blackPawns = input.required<number[]>();
   movablePawns = input.required<number[]>();
+  isMultiplayer = input(true);
 
   apiService = inject(ApiService);
 
@@ -25,7 +27,7 @@ export class Board {
       return;
     }
     console.log(`ready to move pawn at index ${indexToMove} by ${this.sticksValue()} spaces.`);
-    this.apiService.apiMovePawn(this.userid(), indexToMove)
+    this.apiService.apiMovePawn(this.userid(), indexToMove, utilities.getPath(this.isMultiplayer()))
       .subscribe((result) => {
         
       })

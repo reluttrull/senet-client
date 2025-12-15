@@ -1,36 +1,36 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { UserInfo } from '../model/user-info';
+import { utilities } from '../shared/utilities'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  protected readonly serverUrl = 'https://localhost:7019';
   http = inject(HttpClient);
   
-  apiRequestJoinGame() {
-    return this.http.get<UserInfo>(`${this.serverUrl}/game/games`, {
+  apiRequestJoinGame(gametype:string) {
+    return this.http.get<UserInfo>(`${utilities.serverUrl}/${gametype}/games`, {
       withCredentials: true
     })
   }
 
-  apiRollSticks(userid:string) {
-    return this.http.put(`${this.serverUrl}/game/sticks/${userid}`, {
+  apiRollSticks(userid:string, gametype:string) {
+    return this.http.put(`${utilities.serverUrl}/${gametype}/sticks/${userid}`, {
       withCredentials: true
     })
   }
 
-  apiChangeTurn(userid:string, nextIsWhiteTurn:boolean) {
-    return this.http.put(`${this.serverUrl}/game/turns/${userid}/${nextIsWhiteTurn}`, {
+  apiChangeTurn(userid:string, nextIsWhiteTurn:boolean, gametype:string) {
+    return this.http.put(`${utilities.serverUrl}/${gametype}/turns/${userid}/${nextIsWhiteTurn}`, {
       withCredentials: true
     })
   }
 
-  apiMovePawn(userid:string, startPosition: number) {
+  apiMovePawn(userid:string, startPosition: number, gametype:string) {
     let params = new HttpParams();
     params = params.set('startPosition', startPosition);
-    return this.http.put(`${this.serverUrl}/game/pawns/${userid}/${startPosition}`, {
+    return this.http.put(`${utilities.serverUrl}/${gametype}/pawns/${userid}/${startPosition}`, {
       params: params,
       withCredentials: true
     })
