@@ -9,17 +9,17 @@ import { utilities } from '../shared/utilities'
 export class ApiService {
   http = inject(HttpClient);
   
-  apiRequestJoinMultiplayerGame() {
-    return this.http.get<UserInfo>(`${utilities.serverUrl}/multiplayer/games`, {
-      withCredentials: true
-    })
+  apiRequestJoinMultiplayerGame(userid:string, username:string) {
+    return this.http.post<UserInfo>(`${utilities.serverUrl}/multiplayer/games`,
+      { "userId": userid, "userName": username }, 
+      { withCredentials: true })
   }
   
   apiRequestJoinSingleplayerGame(userid:string, username:string) {
     console.log('got here', userid, username);
-    return this.http.get(`${utilities.serverUrl}/singleplayer/games/${username}/${userid}`, {
-      withCredentials: true
-    })
+    return this.http.post(`${utilities.serverUrl}/singleplayer/games`,
+      { "userId": userid, "userName": username }, 
+      { withCredentials: true })
   }
 
   apiRollSticks(userid:string, gametype:string) {
