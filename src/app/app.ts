@@ -1,5 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { MatButton } from '@angular/material/button'
 import * as signalR from '@microsoft/signalr';
 import { GameInfoBlock } from './components/game-info-block/game-info-block';
 import { Board } from './components/board/board';
@@ -9,7 +10,7 @@ import { utilities } from './shared/utilities';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, GameInfoBlock, Board, Score],
+  imports: [RouterOutlet, MatButton, GameInfoBlock, Board, Score],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -14,7 +14,7 @@
     }
     @if (!waitingForMatch && (!gameStarted || gameOver)) {
       <div class="join-game-button">
-        <button (click)="requestJoinMultiplayerGame()">Join Game</button>
+        <button matButton tonal (click)="requestJoinMultiplayerGame()">Join Game</button>
       </div>
     }
     @if (userid().length > 0 && !gameOver) {
