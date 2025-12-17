@@ -15,8 +15,8 @@ import { utilities } from './shared/utilities';
 })
 export class App {
   protected readonly title = signal('Senet Client');
-  public gameStarted = signal(false);
-  public gameOver = signal(false);
+  public gameStarted = false;
+  public gameOver = false;
   public userid = signal('');
   public username = signal('');
   public isPlayerWhite = signal(false);
@@ -28,11 +28,13 @@ export class App {
   public movablePawns = signal([]);
   public winner = signal('');
   public isMultiplayer = signal(true);
+  public waitingForMatch = false;
 
   apiService = inject(ApiService);
 
   requestJoinMultiplayerGame() {
-    this.gameOver.set(false);
+    this.gameOver = false;
+    this.waitingForMatch = true;
     this.apiService.apiRequestJoinMultiplayerGame()
       .subscribe((startUserInfo) => {
         console.log('initial server response (generated user info)', startUserInfo);
@@ -43,7 +45,7 @@ export class App {
       })
   }
   requestJoinSingleplayerGame(userid:string = '', username:string = '') {
-    this.gameOver.set(false);
+    this.gameOver = false;
     this.apiService.apiRequestJoinSingleplayerGame(userid, username)
       .subscribe(() => {
         console.log('initial server response');
@@ -89,7 +91,7 @@ export class App {
         this.opponentUsername.set(message.playerWhite?.userName);
         this.isPlayerWhite.set(false);
       }
-      this.gameStarted.set(true);
+      this.gameStarted = true;
     });
 
     connection.on("MatchNotFound", (message) => {
@@ -107,10 +109,11 @@ export class App {
       this.blackPawns.set(message.blackPositions);
       this.movablePawns.set(message.movablePositions);
       this.isWhiteTurn.set(message.isWhiteTurn);
+      this.waitingForMatch = false;
     });
     connection.on("GameOver", (message) => {
       console.log("Message from SignalR hub: game over", message);
-      this.gameOver.set(true);
+      this.gameOver = true;
       this.winner.set(message.userId);
       this.whitePawns.set([]);
       this.blackPawns.set([]);
