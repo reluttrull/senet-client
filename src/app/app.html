@@ -10,27 +10,28 @@
     }
     @if (gameOver) {
       <h2>Game over!</h2>
-      <div>{{ winner() == userid() ?  'You won!' : 'You lost...' }}</div>
+      <h1>{{ winner() == userid() ?  'You win' : 'You lose...' }}</h1>
     }
     @if (!waitingForMatch && (!gameStarted || gameOver)) {
       <div class="join-game-button">
         <button matButton tonal (click)="requestJoinMultiplayerGame()">Join Game</button>
       </div>
     }
-    <h2>Wins: {{ numberOfWins }} Losses: {{ numberOfLosses }}</h2>
-    @if (userid().length > 0 && !gameOver) {
-      <app-game-info-block [username]="username()" [opponentUsername]="opponentUsername()" />
-    }
     @if (gameStarted && !gameOver) {
       <div class="quit-game-button">
         <button matButton tonal (click)="quitGame()">Quit Game</button>
       </div>
+    }
+    <h2>Wins: {{ numberOfWins }} Losses: {{ numberOfLosses }}</h2>
+    @if (userid().length > 0 && !gameOver) {
+      <app-game-info-block [username]="username()" [opponentUsername]="opponentUsername()" [isPlayerWhite]="isPlayerWhite()" [whitePawns]="whitePawns()" [blackPawns]="blackPawns()" />
+    }
+    @if (gameStarted && !gameOver) {
       <app-board [userid]="userid()" [isPlayerTurn]="isPlayerWhite() == isWhiteTurn()" [sticksValue]="sticksValue()" [whitePawns]="whitePawns()" [blackPawns]="blackPawns()" [movablePawns]="movablePawns()" [isMultiplayer]="isMultiplayer()" />
       @if (isPlayerWhite() == isWhiteTurn() && movablePawns().length == 0) {
         <button (click)="skipTurn()">Skip turn</button>
       }
       <div [class.player-turn-reminder]="isPlayerWhite() == isWhiteTurn()">{{isPlayerWhite() == isWhiteTurn() ? 'You can' : 'Your opponent can' }} move <strong>{{ sticksValue() }}</strong> squares</div>
-      <app-score [whitePawns]="whitePawns()" [blackPawns]="blackPawns()" [isPlayerWhite]="isPlayerWhite()" />
     }
   </div>
 </main>

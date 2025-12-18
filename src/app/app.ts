@@ -4,13 +4,12 @@ import { MatButton } from '@angular/material/button'
 import * as signalR from '@microsoft/signalr';
 import { GameInfoBlock } from './components/game-info-block/game-info-block';
 import { Board } from './components/board/board';
-import { Score } from './components/score/score';
 import { ApiService } from './services/api-service';
 import { utilities } from './shared/utilities';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatButton, GameInfoBlock, Board, Score],
+  imports: [RouterOutlet, MatButton, GameInfoBlock, Board],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -22,7 +21,7 @@ export class App {
   public numberOfLosses = 0;
   public userid = signal('');
   public username = signal('');
-  public isPlayerWhite = signal(false);
+  public isPlayerWhite = signal(true);
   public opponentUsername = signal('');
   public isWhiteTurn = signal(true);
   public sticksValue = signal(0);
