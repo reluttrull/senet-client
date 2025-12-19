@@ -39,44 +39,68 @@ export class App {
     this.gameStarted = false;
     this.waitingForMatch = true;
     this.apiService.apiRequestJoinMultiplayerGame(this.userid(), this.username())
-      .subscribe((startUserInfo) => {
-        console.log('initial server response (generated user info)', startUserInfo);
-        this.username.set(startUserInfo.userName);
-        this.userid.set(startUserInfo.userId);
-        this.opponentUsername.set('');
-        if (!this.connected) this.connectSignalR(startUserInfo.userId);
-      })
+      .subscribe({
+        next: (startUserInfo) => {
+          console.log('initial server response (generated user info)', startUserInfo);
+          this.username.set(startUserInfo.userName);
+          this.userid.set(startUserInfo.userId);
+          this.opponentUsername.set('');
+          if (!this.connected) this.connectSignalR(startUserInfo.userId);
+        },
+        error: (err) => {
+          console.log('Error requesting match', err);
+          alert(`Error requesting match: ${err.message}`);
+        }
+      });
   }
   requestJoinSingleplayerGame() {
     this.gameOver = false;
     this.gameStarted = false;
     this.apiService.apiRequestJoinSingleplayerGame(this.userid(), this.username())
-      .subscribe(() => {
+      .subscribe({
+        next: () => {
         console.log('initial server response');
         this.opponentUsername.set('Computer');
         if (!this.connected) this.connectSignalR(this.userid());
-      })
+        },
+        error: (err) => {
+          console.log('Error requesting match', err);
+          alert(`Error requesting match: ${err.message}`);
+        }
+      });
   }
 
   quitGame() {
     this.apiService.apiQuitGame(this.userid(), utilities.getPath(this.isMultiplayer()))
-      .subscribe(() => {
-        
+      .subscribe({
+        next: () => {},
+        error: (err) => {
+          console.log('Error quitting match', err);
+          alert(`Error quitting match: ${err.message}`);
+        }
       });
   }
 
   rollSticks() {
     this.apiService.apiRollSticks(this.userid(), utilities.getPath(this.isMultiplayer()))
-      .subscribe((result) => {
-        
-      })
+      .subscribe({
+        next: () => {},
+        error: (err) => {
+          console.log('Error rolling sticks', err);
+          alert(`Error rolling sticks: ${err.message}`);
+        }
+      });
   }
 
   skipTurn() {
     this.apiService.apiChangeTurn(this.userid(), !this.isWhiteTurn(), utilities.getPath(this.isMultiplayer()))
-      .subscribe((result) => {
-        
-      })
+      .subscribe({
+        next: () => {},
+        error: (err) => {
+          console.log('Error changing turn', err);
+          alert(`Error changing turn: ${err.message}`);
+        }
+      });
   }
   
   async connectSignalR(id: string) {

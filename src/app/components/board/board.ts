@@ -28,8 +28,12 @@ export class Board {
     }
     console.log(`ready to move pawn at index ${indexToMove} by ${this.sticksValue()} spaces.`, this.isMultiplayer() ? 'is multiplayer' : 'is singleplayer');
     this.apiService.apiMovePawn(this.userid(), indexToMove, utilities.getPath(this.isMultiplayer()))
-      .subscribe((result) => {
-        
-      })
+      .subscribe({
+        next: () => {},
+        error: (err) => {
+          console.log('Error moving pawn', err);
+          alert(`Error moving pawn: ${err.message}`);
+        }
+      });
   }
 }
